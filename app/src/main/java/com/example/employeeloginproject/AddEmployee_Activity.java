@@ -55,6 +55,9 @@ public class AddEmployee_Activity extends AppCompatActivity {
                     EmployeeHelper db = new EmployeeHelper(getApplicationContext());
                     byte[] imageBytes = getBitmapAsByteArray(myImage);
                     long success = db.InsertEmp(name.getText().toString(), password.getText().toString(), imageBytes, department.getText().toString());
+                    //add in all employees list
+                    Employee tempEmployee= new Employee((int)success, name.getText().toString(), password.getText().toString(), myImage, department.getText().toString());
+                    Employee.allEmployees.add(tempEmployee);
                     if(success != -1) {
                         Toast.makeText(v.getContext(), "Employee inserted Successfully", Toast.LENGTH_SHORT).show();
                         name.getText().clear();

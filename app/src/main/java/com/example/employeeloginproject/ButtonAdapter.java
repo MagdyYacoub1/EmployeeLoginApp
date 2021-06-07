@@ -19,7 +19,7 @@ public class ButtonAdapter extends BaseAdapter {
     private Context mContext;
     private int buttonId;
     private final int totalButtons = 6;
-    List<String> buttonsTitles = Arrays.asList("Sign In", "Sign Out", "All Employees", "Attendants", "Absentees", "Add Employee");
+    List<String> buttonsTitles = Arrays.asList("Sign In", "Sign Out", "All Employees", "Attendees", "Absentees", "Add Employee");
     List<Intent> activitiesList;
 
 
@@ -27,7 +27,9 @@ public class ButtonAdapter extends BaseAdapter {
     public ButtonAdapter(Context context) {
         this.mContext = context;
         Intent AddActivityIntent = new Intent(mContext, AddEmployee_Activity.class);
-        activitiesList = Arrays.asList(null, null, null, null, null, AddActivityIntent);
+        Intent SignInActivityIntent = new Intent(mContext, LoginActivity.class);
+
+        activitiesList = Arrays.asList(SignInActivityIntent, null, null, null, null, AddActivityIntent);
     }
 
     @Override

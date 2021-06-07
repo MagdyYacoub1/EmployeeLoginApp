@@ -1,11 +1,16 @@
 package com.example.employeeloginproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +18,16 @@ import java.util.List;
 public class ButtonAdapter extends BaseAdapter {
     private Context mContext;
     private int buttonId;
-    private final int totalButtons = 5;
-    List<String> buttonsTitles = Arrays.asList("Sign In", "Sign Out", "All Employees", "Attendants", "Absentees");
+    private final int totalButtons = 6;
+    List<String> buttonsTitles = Arrays.asList("Sign In", "Sign Out", "All Employees", "Attendants", "Absentees", "Add Employee");
+    List<Intent> activitiesList;
+
+
+
     public ButtonAdapter(Context context) {
         this.mContext = context;
+        Intent AddActivityIntent = new Intent(mContext, AddEmployee_Activity.class);
+        activitiesList = Arrays.asList(null, null, null, null, null, AddActivityIntent);
     }
 
     @Override
@@ -47,10 +58,15 @@ public class ButtonAdapter extends BaseAdapter {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Button #" + (position + 1), Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Button #" + (position), Toast.LENGTH_SHORT).show();
+                switchActivity(position);
             }
         });
 
         return btn;
+    }
+
+    void switchActivity(int position){
+        mContext.startActivity(activitiesList.get(position));
     }
 }

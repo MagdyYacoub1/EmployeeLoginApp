@@ -28,8 +28,8 @@ public class EmployeeHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+tableName+"("+columnId+" integer primary key autoincrement , "+columnName+" text not null," +
-                columnPassword+" text not null , "+columnImage+" text not null , "+columnLoginTime+" text not null ," +
-                columnSignOutTime+"  text not null , "+columnDepartment+" text not null)");
+                columnPassword+" text not null , "+columnImage+" blob not null , "+columnLoginTime+" text," +
+                columnSignOutTime+" text, "+columnDepartment+" text not null)");
     }
 
     @Override
@@ -38,19 +38,18 @@ public class EmployeeHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void InsertEmp (String empName, String empPassword, String empImage, String empLoginTime, String empSignOutTime, String empDepartment)
+    public long InsertEmp (String empName, String empPassword, byte[] empImage, String empDepartment)
     {
         ContentValues row = new ContentValues();
         row.put(columnName, empName);
         row.put(columnPassword, empPassword);
         row.put(columnImage, empImage);
-        row.put(columnLoginTime, empLoginTime);
-        row.put(columnSignOutTime, empSignOutTime);
         row.put(columnDepartment, empDepartment);
 
         employeeDatabase = getWritableDatabase();
-        employeeDatabase.insert(tableName, null, row);
+        long success = employeeDatabase.insert(tableName, null, row);
         employeeDatabase.close();
+        return success;
     }
 
     Cursor getAllEmployees() {

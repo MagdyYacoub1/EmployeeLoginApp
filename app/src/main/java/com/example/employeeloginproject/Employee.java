@@ -3,6 +3,7 @@ package com.example.employeeloginproject;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Employee {
@@ -10,8 +11,8 @@ public class Employee {
     String name;
     String password;
     Bitmap image;
-    String loginTime;
-    String signOutTime;
+    Date loginTime;
+    Date signOutTime;
     String department;
     static List<Employee> allEmployees = new ArrayList<Employee>();;
     static List<Employee> attendees;
@@ -24,6 +25,8 @@ public class Employee {
         this.password = password;
         this.image = image;
         this.department = department;
+        this.signOutTime = null;
+        this.department = null;
     }
 
 }

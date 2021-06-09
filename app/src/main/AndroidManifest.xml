@@ -3,8 +3,10 @@
     package="com.example.employeeloginproject">
 
 
+    <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
+        android:value="face"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <uses-feature android:name="android.hardware.camera2"/>
     <application
         android:allowBackup="true"

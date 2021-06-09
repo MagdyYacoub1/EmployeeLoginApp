@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class EmployeeHelper extends SQLiteOpenHelper {
@@ -63,5 +66,24 @@ public class EmployeeHelper extends SQLiteOpenHelper {
         }
         employeeDatabase.close();
         return cursor;
+    }
+
+    public void updateLoginTime(int id){
+        DateFormat date = new SimpleDateFormat("MMM dd yyyy, h:mm");
+        String dateFormatted = date.format(Calendar.getInstance().getTime());
+        ContentValues row = new ContentValues();
+        row.put(columnLoginTime, dateFormatted);
+        employeeDatabase = getWritableDatabase();
+        employeeDatabase.update(tableName, row, columnId+" = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void updateSignOutTime(int id){
+        DateFormat date = new SimpleDateFormat("MMM dd yyyy, h:mm");
+        String dateFormatted = date.format(Calendar.getInstance().getTime());
+        ContentValues row = new ContentValues();
+        row.put(columnSignOutTime, dateFormatted);
+        employeeDatabase = getWritableDatabase();
+        employeeDatabase.update(tableName, row, columnId+" = ?", new String[]{String.valueOf(id)});
+        employeeDatabase.close();
     }
 }

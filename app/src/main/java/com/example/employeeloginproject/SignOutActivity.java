@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-//import android.gms.vision.face.FaceDetector;
-//import android.media.FaceDetector;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -35,7 +33,6 @@ import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.image.ops.ResizeOp;
 import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -45,8 +42,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity {
-    private final int cam_request = 100;
+public class SignOutActivity extends AppCompatActivity {
+    private final int cam_request = 300;
     private static final float IMAGE_MEAN = 0.0f;
     private static final float IMAGE_STD = 1.0f;
     private float[][] ori_embedding = new float[1][128];
@@ -56,30 +53,31 @@ public class LoginActivity extends AppCompatActivity {
     private EditText name;
     private EditText password;
     private Button smileBtn;
-    private Button signInBtn;
+    private Button signOutBtn;
     private ImageView employeeImage;
     private Bitmap myImage;
     private Bitmap croppedImage;
     private Interpreter tfLite;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_out);
 
 
-        name = (EditText) findViewById(R.id.loginActivity_NameText);
-        password = (EditText) findViewById(R.id.loginActivity_PasswordText);
-        smileBtn = (Button) findViewById(R.id.loginActivity_smileBtn);
-        signInBtn = (Button) findViewById(R.id.loginActivity_loginBtn);
-        employeeImage = (ImageView) findViewById(R.id.loginActivity_imageView);
+        name = (EditText) findViewById(R.id.signOutActivity_NameText);
+        password = (EditText) findViewById(R.id.signOutActivity_PasswordText);
+        smileBtn = (Button) findViewById(R.id.signOutActivity_smileBtn);
+        signOutBtn = (Button) findViewById(R.id.signOutActivity_SignOutBtn);
+        employeeImage = (ImageView) findViewById(R.id.signOutActivity_imageView);
         try {
             tfLite = new Interpreter(loadModelFile(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        signInBtn.setOnClickListener(new View.OnClickListener() {
+        signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(name.getText())) {
@@ -89,34 +87,34 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (employeeImage.getDrawable() == null) {
                     Toast.makeText(v.getContext(), "Please include a picture", Toast.LENGTH_SHORT).show();
                 } else {
-                    Employee signEmployee = null;
+                    Employee signOutEmployee = null;
                     int index = -1;
                     boolean found = false;
                     List<Employee> allEmployees = Employee.allEmployees;
-                    for (int i = 0, allEmployeesSize = allEmployees.size(); i < allEmployeesSize; i++) {
+                    for (int i = 0, attendeesSize = allEmployees.size(); i < attendeesSize; i++) {
                         Employee emp = allEmployees.get(i);
                         if (emp.name.equalsIgnoreCase(name.getText().toString())
                                 && emp.password.equals(password.getText().toString())) {
-                            signEmployee = emp;
+                            signOutEmployee = emp;
                             index = i;
                             found = true;
                             break;
                         }
                     }
                     if (found) {
-                        getEmbeddings(signEmployee.image, "original");
+                        getEmbeddings(signOutEmployee.image, "original");
                         double distance = calculate_distance(ori_embedding, test_embedding);
 
                         if (distance < 6.0) {
-                            if (signEmployee.loginTime != null) {
-                                Toast.makeText(v.getContext(), signEmployee.name + " is already signed in for today", Toast.LENGTH_SHORT).show();
+                            if (signOutEmployee.signOutTime != null) {
+                                Toast.makeText(v.getContext(), signOutEmployee.name + " is already signed out for today", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 Date currentTime = Calendar.getInstance().getTime();
-                                allEmployees.get(index).loginTime = currentTime;
+                                allEmployees.get(index).signOutTime = currentTime;
                                 EmployeeHelper db = new EmployeeHelper(getApplicationContext());
-                                db.updateLoginTime(allEmployees.get(index).id);
-                                Toast.makeText(v.getContext(), "Verified and Signed in Successfully", Toast.LENGTH_SHORT).show();
+                                db.updateSignOutTime(allEmployees.get(index).id);
+                                Toast.makeText(v.getContext(), "Verified and Signed Out Successfully", Toast.LENGTH_SHORT).show();
                             }
                             name.getText().clear();
                             password.getText().clear();
@@ -130,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         smileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // Match the request 'pic id with requestCode
@@ -165,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setMode(FaceDetector.FAST_MODE)
                 .build();
         if (!faceDetector.isOperational()) {
-            Toast.makeText(LoginActivity.this, "Face Detector Won't work on your device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignOutActivity.this, "Face Detector Won't work on your device", Toast.LENGTH_SHORT).show();
             return;
         }
         Frame frame = new Frame.Builder().setBitmap(myImage).build();
@@ -181,14 +177,13 @@ public class LoginActivity extends AppCompatActivity {
             canvas.drawRoundRect(rectF, 2, 2, boxPaint);
             faceDetector.release();
         } else {
-            Toast.makeText(LoginActivity.this, "No Face Detected Please take another image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignOutActivity.this, "No Face Detected Please take another image", Toast.LENGTH_SHORT).show();
             return;
         }
         employeeImage.setImageDrawable(new BitmapDrawable(getResources(), temp));
         croppedImage = Bitmap.createBitmap(myImage, (int) rectF.left, (int) rectF.top, (int) rectF.width(), (int) rectF.height());
         getEmbeddings(croppedImage, "test");
     }
-
     private MappedByteBuffer loadModelFile(Activity activity) throws IOException {
         AssetFileDescriptor fileDescriptor = activity.getAssets().openFd("Qfacenet.tflite");
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
@@ -247,5 +242,4 @@ public class LoginActivity extends AppCompatActivity {
         }
         return Math.sqrt(sum);
     }
-
 }

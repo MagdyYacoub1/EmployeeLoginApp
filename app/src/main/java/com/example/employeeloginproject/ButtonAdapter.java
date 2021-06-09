@@ -28,8 +28,9 @@ public class ButtonAdapter extends BaseAdapter {
         this.mContext = context;
         Intent AddActivityIntent = new Intent(mContext, AddEmployee_Activity.class);
         Intent SignInActivityIntent = new Intent(mContext, LoginActivity.class);
+        Intent SignOutActivityIntent = new Intent(mContext, SignOutActivity.class);
 
-        activitiesList = Arrays.asList(SignInActivityIntent, null, null, null, null, AddActivityIntent);
+        activitiesList = Arrays.asList(SignInActivityIntent, SignOutActivityIntent, null, null, null, AddActivityIntent);
     }
 
     @Override

@@ -14,9 +14,9 @@ public class Employee {
     Date loginTime;
     Date signOutTime;
     String department;
-    static List<Employee> allEmployees = new ArrayList<Employee>();;
-    static List<Employee> attendees;
-    static List<Employee> absentees;
+    static List<Employee> allEmployees = new ArrayList<Employee>();
+    static List<Employee> attendees = new ArrayList<Employee>();
+    static List<Employee> absentees= new ArrayList<Employee>();
 
 
     public Employee(int id, String name, String password, Bitmap image, String department) {

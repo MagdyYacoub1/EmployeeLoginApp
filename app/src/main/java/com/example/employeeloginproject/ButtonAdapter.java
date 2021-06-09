@@ -1,11 +1,16 @@
 package com.example.employeeloginproject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -67,7 +72,39 @@ public class ButtonAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "Button #" + (position), Toast.LENGTH_SHORT).show();
-                switchActivity(position);
+                if(position == 2 || position == 3 || position == 4 || position == 5){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Admin Only");
+                    final EditText input = new EditText(mContext);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (TextUtils.isEmpty(input.getText())) {
+                                input.setError(" Please Enter a Name");
+                            }else{
+                                if(input.getText().toString().equals(Admin.Password)){
+                                    switchActivity(position);
+                                }else{
+                                    dialog.cancel();
+                                    Toast.makeText(v.getContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+                }else{
+                    switchActivity(position);
+                }
+
             }
         });
 

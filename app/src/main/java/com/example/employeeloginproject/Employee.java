@@ -26,7 +26,7 @@ public class Employee {
         this.image = image;
         this.department = department;
         this.signOutTime = null;
-        this.department = null;
+        this.loginTime = null;
     }
 
 }

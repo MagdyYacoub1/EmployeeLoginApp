@@ -7,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +25,17 @@ public class ButtonAdapter extends BaseAdapter {
         Intent AddActivityIntent = new Intent(mContext, AddEmployee_Activity.class);
         Intent SignInActivityIntent = new Intent(mContext, LoginActivity.class);
         Intent SignOutActivityIntent = new Intent(mContext, SignOutActivity.class);
+        Intent DisplayAllActivityIntent = new Intent(mContext, DisplayAllActivity.class);
+        Intent DisplayAttendeesActivityIntent = new Intent(mContext, DisplayAttendeesActivity.class);
+        Intent DisplayAbsenteesActivityIntent = new Intent(mContext, DisplayAbsenteesActivity.class);
 
-        activitiesList = Arrays.asList(SignInActivityIntent, SignOutActivityIntent, null, null, null, AddActivityIntent);
+        activitiesList = Arrays.asList(
+                SignInActivityIntent,
+                SignOutActivityIntent,
+                DisplayAllActivityIntent,
+                DisplayAttendeesActivityIntent,
+                DisplayAbsenteesActivityIntent,
+                AddActivityIntent);
     }
 
     @Override

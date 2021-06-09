@@ -8,6 +8,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.GridView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -24,8 +27,19 @@ public class MainActivity extends AppCompatActivity {
             String password = cursor.getString(2);
             byte[] image = cursor.getBlob(3);
             Bitmap bmp= BitmapFactory.decodeByteArray(image, 0 , image.length);
-            String department = cursor.getString(4);
+            String department = cursor.getString(6);
             tempEmployee = new Employee(id, name, password, bmp, department);
+            String loginTime  = cursor.getString(4);
+            String signOutTime  = cursor.getString(5);
+            SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy, h:mm");
+            try {
+                if(loginTime != null)
+                    tempEmployee.loginTime = format.parse(loginTime);
+                if(signOutTime != null)
+                    tempEmployee.signOutTime = format.parse(signOutTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             Employee.allEmployees.add(tempEmployee);
             cursor.moveToNext();
         }

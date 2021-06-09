@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EmployeeLogInProject">
-        <activity android:name=".SignOutActivity"></activity>
+        <activity android:name=".DisplayAbsenteesActivity"></activity>
+        <activity android:name=".DisplayAttendeesActivity" />
+        <activity android:name=".DisplayAllActivity" />
+        <activity android:name=".SignOutActivity" />
         <activity android:name=".AddEmployee_Activity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">

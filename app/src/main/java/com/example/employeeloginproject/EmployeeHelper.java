@@ -75,6 +75,7 @@ public class EmployeeHelper extends SQLiteOpenHelper {
         row.put(columnLoginTime, dateFormatted);
         employeeDatabase = getWritableDatabase();
         employeeDatabase.update(tableName, row, columnId+" = ?", new String[]{String.valueOf(id)});
+        employeeDatabase.close();
     }
 
     public void updateSignOutTime(int id){
@@ -84,6 +85,12 @@ public class EmployeeHelper extends SQLiteOpenHelper {
         row.put(columnSignOutTime, dateFormatted);
         employeeDatabase = getWritableDatabase();
         employeeDatabase.update(tableName, row, columnId+" = ?", new String[]{String.valueOf(id)});
+        employeeDatabase.close();
+    }
+
+    public void deleteEmployee(int id){
+        employeeDatabase = getWritableDatabase();
+        employeeDatabase.delete(tableName, columnId+" = ?", new String[]{String.valueOf(id)});
         employeeDatabase.close();
     }
 }

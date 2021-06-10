@@ -51,12 +51,26 @@ public class DisplayAllActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = getLayoutInflater().inflate(R.layout.custom_all_list, null);
             ImageView empImage = (ImageView) view.findViewById(R.id.AllListItem_imageView);
+            ImageView deleteImage = (ImageView) view.findViewById(R.id.AllListItem_deleteImage);
             TextView empName = (TextView) view.findViewById(R.id.AllListItem_NameText);
             TextView empDepartment = (TextView) view.findViewById(R.id.AllListItem_DepartmentText);
 
             empImage.setImageBitmap(Employee.allEmployees.get(position).image);
             empName.setText(Employee.allEmployees.get(position).name);
             empDepartment.setText(Employee.allEmployees.get(position).department);
+            deleteImage.setTag(position);
+            deleteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = (int)v.getTag();
+                    int id = Employee.allEmployees.get(pos).id;
+                    Employee.allEmployees.remove(pos);
+                    CustomAdapter.this.notifyDataSetChanged();
+                    numOfEmployees.setText(String.valueOf(Employee.allEmployees.size()));
+                    EmployeeHelper db = new EmployeeHelper(getApplicationContext());
+                    db.deleteEmployee(id);
+                }
+            });
             return view;
         }
     }

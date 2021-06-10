@@ -71,7 +71,7 @@ public class ButtonAdapter extends BaseAdapter {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Button #" + (position), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(v.getContext(), "Button #" + (position), Toast.LENGTH_SHORT).show();
                 if(position == 2 || position == 3 || position == 4 || position == 5){
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("Admin Only");

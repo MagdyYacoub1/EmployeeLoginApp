@@ -2,13 +2,19 @@ package com.example.employeeloginproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DisplayAllActivity extends AppCompatActivity {
 
@@ -62,13 +68,42 @@ public class DisplayAllActivity extends AppCompatActivity {
             deleteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = (int)v.getTag();
-                    int id = Employee.allEmployees.get(pos).id;
-                    Employee.allEmployees.remove(pos);
-                    CustomAdapter.this.notifyDataSetChanged();
-                    numOfEmployees.setText(String.valueOf(Employee.allEmployees.size()));
-                    EmployeeHelper db = new EmployeeHelper(getApplicationContext());
-                    db.deleteEmployee(id);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Verify Authority");
+                    final EditText input = new EditText(v.getContext());
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (TextUtils.isEmpty(input.getText())) {
+                                input.setError(" Please Enter Password");
+                            }else{
+                                if(input.getText().toString().equals(Admin.Password)){
+                                    int pos = (int)v.getTag();
+                                    int id = Employee.allEmployees.get(pos).id;
+                                    Employee.allEmployees.remove(pos);
+                                    CustomAdapter.this.notifyDataSetChanged();
+                                    numOfEmployees.setText(String.valueOf(Employee.allEmployees.size()));
+                                    EmployeeHelper db = new EmployeeHelper(getApplicationContext());
+                                    db.deleteEmployee(id);
+                                    Toast.makeText(v.getContext(), "Employee deleted successfully", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    dialog.cancel();
+                                    Toast.makeText(v.getContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+
                 }
             });
             return view;

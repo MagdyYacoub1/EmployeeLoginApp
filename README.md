@@ -1,6 +1,6 @@
 # EmployeeLoginApp
 Daily Login App For Employees.<br>
-  Enable employees to login and logout by using their own user name and password.<br>  In adition, the app uses face detection to verify the employee identity.
+  Enable employees to log in and log out by using their own username and password.<br>  In addition, the app uses face detection to verify the employee's identity.
 
 
 # Main Functionalities
@@ -8,7 +8,7 @@ Daily Login App For Employees.<br>
 2. Face recognition.
 3. Record login and logout times for employees.
 4. Show the employees who are still working.
-5. Show abssent employees.
+5. Show absent employees.
 
 # Technologies
 1. SqlLite
